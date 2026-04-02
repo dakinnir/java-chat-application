@@ -3,7 +3,7 @@ package com.dakinnir.backendserver.auth.service;
 import com.dakinnir.backendserver.auth.dto.AuthResponse;
 import com.dakinnir.backendserver.auth.dto.LoginRequest;
 import com.dakinnir.backendserver.auth.dto.RegisterRequest;
-import com.dakinnir.backendserver.auth.dto.UserResponse;
+import com.dakinnir.backendserver.user.dto.UserResponse;
 import com.dakinnir.backendserver.auth.exception.InvalidCredentialException;
 import com.dakinnir.backendserver.auth.exception.InvalidRefreshTokenException;
 import com.dakinnir.backendserver.auth.exception.UserAlreadyExistException;
@@ -67,7 +67,7 @@ public class AuthService {
             String accessToken = jwtService.generateAccessToken(userDetails);
             RefreshToken refreshToken = createAndPersistRefreshToken(user);
 
-            UserResponse userResponse = new UserResponse(user.getId(), user.getUsername(), user.getEmail());
+            UserResponse userResponse = new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt());
 
             return new AuthResponse(
                     userResponse,
@@ -113,7 +113,7 @@ public class AuthService {
         String accessToken = jwtService.generateAccessToken(userDetails);
         RefreshToken refreshToken = createAndPersistRefreshToken(saved);
 
-        UserResponse userResponse = new UserResponse(saved.getId(), saved.getUsername(), saved.getEmail());
+        UserResponse userResponse = new UserResponse(saved.getId(), saved.getUsername(), saved.getEmail(), user.getCreatedAt());
 
         return new AuthResponse(
                 userResponse,
@@ -153,7 +153,7 @@ public class AuthService {
         String newAccessToken = jwtService.generateAccessToken(userDetails);
         RefreshToken newRefreshToken = createAndPersistRefreshToken(user);
 
-        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername(), user.getEmail());
+        UserResponse userResponse = new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getCreatedAt());
 
         return new AuthResponse(
                 userResponse,

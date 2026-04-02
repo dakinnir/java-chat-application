@@ -1,5 +1,6 @@
 package com.dakinnir.backendserver.auth.security;
 
+import com.dakinnir.backendserver.user.exception.NoAuthenticatedUserException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +37,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
+        try {
+            username = jwtService.extractUsername(jwt);
+        } catch (Exception e) {
+            // Invalid JWT → respond with 401 and stop the chain
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("""
+            {"error":"invalid_token","message":"Invalid JWT token"}
+            """);
+            response.getWriter().flush();
+            return;
+        }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
