@@ -30,14 +30,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserProfile());
     }
 
-    // Exact search: username or email must match exactly (case-insensitive)
+    // Find user by id from path variable
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("id") Long id
     ) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
-    // Term-based search: returns list of users whose username or email contains the term (case-insensitive)
+    // Term-based search: returns list of users whose username or email contains the term (case-insensitive) - excluding user making search
     @GetMapping("/search")
     public ResponseEntity<PagedUsersResponse> searchUsersByTerm(
             @RequestParam("q")
