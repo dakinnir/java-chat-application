@@ -17,6 +17,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmailIgnoreCase(String email);
 
-    // Term-based search by username or email (substring, case-insensitive)
-    Page<User> findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(String usernameTerm, String emailTerm, Pageable pageable);
+    // Term-based search by username or email (substring, case-insensitive) not excluding the user making the search
+    // Page<User> findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(String usernameTerm, String emailTerm, Pageable pageable);
+
+    // Search for users partial matching with username or email and excluding user making the search
+    Page<User> findByIdNotAndUsernameContainingIgnoreCaseOrIdNotAndEmailContainingIgnoreCase(
+            Long excludedId,
+            String usernameTerm,
+            Long excludedId2,
+            String emailTerm,
+            Pageable pageable
+    );
 }
+
